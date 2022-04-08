@@ -2,10 +2,11 @@ import tkinter as tk    #импортируем нужные модули
 from math import *
 import tkinter
 from tkinter import *
-import keyboard
 func2=""    #присвоение переменным значений
 w=500
 h1=500
+a=0
+b=0
 h2=560
 indent=20
 indent2=10
@@ -17,8 +18,6 @@ c = Canvas(root1, width=500, height=560)
 c.create_rectangle(-10, -10, w+10, h1, fill="black")
 c.create_line(w/2, indent, w/2, h2-indent, fill='white')
 c.create_line(indent, h1/2, w-indent, h1/2, fill='white')
-c.create_line(w-indent-indent2,h1/2-indent2,w-indent,h1/2,w-indent-indent2,h1/2+indent2, fill='white')
-c.create_line(w/2-indent2,indent+indent2,w/2,indent,w/2+indent2,indent+indent2, fill='white')
 g=(w//2)//k
 for i in range(0, g):
     if i != 0:
@@ -56,61 +55,90 @@ c.create_rectangle(0, 500, 505, 565, fill='gray90')
 c.pack()
 plus = Button(root1,text="+", width=6, height=2, command=lambda: plus())    #создание кнопок уменьшения и увеличения
 minus = Button(root1, text="-", width=6, height=2, command=lambda: minus())
-plus.place(x='195', y='510')
-minus.place(x='255', y='510')
+left = Button(root1,text="←", width=6, height=2, command=lambda: left())
+right = Button(root1, text="→", width=6, height=2, command=lambda: right())
+up = Button(root1,text="↑", width=6, height=2, command=lambda: up())
+down = Button(root1, text="↓", width=6, height=2, command=lambda: down())
+plus.place(x='70', y='510')
+minus.place(x='130', y='510')
+left.place(x='190', y='510')
+right.place(x='250', y='510')
+up.place(x='310', y='510')
+down.place(x='370', y='510')
 
 def plus():    #функция кнопки увеличения
     global k
     k=k+10
-    do_draw(func2,k)
+    do_draw(func2,k,a,b)
 
 
 def minus():    #функция кнопки уменьшения
-    global k
+    global k,a,b
     if k>11:
         k=k-10
-        do_draw(func2,k)
+        do_draw(func2,k,a,b)
+
+def left():
+    global a,b,k
+    a = a-1
+    if a*k<-5*31:
+        a=(-5*31)//k
+    do_draw(func2,k,a,b)
 
 
+def right():
+    global a, b, k
+    a = a + 1
+    if a * k > 6 * 31:
+        a = (6 * 31) // k
+    do_draw(func2, k, a, b)
+def up():
+    global a, b, k
+    b = b - 1
+    if b * k < -5* 31:
+        b = (-5 * 31) // k
+    do_draw(func2, k, a, b)
+def down():
+    global a, b, k
+    b = b + 1
+    if b * k> 6 * 31:
+        b = (6 * 31) // k
+    do_draw(func2, k, a, b)
 
-def do_draw(func1,k):     #отрисовка функции
+def do_draw(func1,k,a,b):     #отрисовка функции
     f=0
     x = -30
     c.create_rectangle(0, 0, w, h1, fill="black")
-    c.create_line(w / 2, indent, w / 2, h2 - indent, fill='white')
-    c.create_line(indent, h1 / 2, w - indent, h1 / 2, fill='white')
-    c.create_line(w - indent - indent2, h1 / 2 - indent2, w - indent, h1 / 2, w - indent - indent2, h1 / 2 + indent2,
-                  fill='white')
-    c.create_line(w / 2 - indent2, indent + indent2, w / 2, indent, w / 2 + indent2, indent + indent2, fill='white')
+    c.create_line(a*k+w / 2, indent, a*k+w / 2, h2 - indent, fill='white')
+    c.create_line(indent, b*k+h1 / 2, w - indent, b*k+h1 / 2, fill='white')
     if k>=30:
-        g = (w // 2) // k
-        for i in range(0, g):
+        for i in range(0, 20):
             if i != 0:
-                c.create_text(w / 2 + i * k, h1 / 2 + 12, text=i, fill='white')
-                c.create_text(w / 2 - 10, h1 / 2 - i * k, text=i, fill='white')
-            c.create_line(w / 2 + i * k, h1 / 2 - 4, w / 2 + k * i, h1 / 2 + 4, fill='white')
-            c.create_line(h1 / 2 - 4, w / 2 + i * k, h1 / 2 + 4, w / 2 + k * i, fill='white')
-        for i in range(0, g):
+                c.create_text(a*k+w / 2 + i * k,b*k+ h1 / 2 + 12, text=i, fill='white')
+                c.create_text(a*k+w / 2 - 10, b*k+h1 / 2 - i * k, text=i, fill='white')
+            c.create_line(a*k+w / 2 + i * k, b*k+h1 / 2 - 4, a*k+w / 2 + k * i, b*k+h1 / 2 + 4, fill='white')
+            c.create_line(a*k+h1 / 2 - 4, b*k+w / 2 + i * k, a*k+h1 / 2 + 4, b*k+w / 2 + k * i, fill='white')
+        for i in range(0, 20):
             f=f-1
-            c.create_text(w / 2 + f * k-4, h1 / 2 + 16, text=f, fill='white')
-            c.create_text(w / 2 - 14, h1 / 2 - f * k, text=f, fill='white')
-            c.create_line(w / 2 + f * k, h1 / 2 - 4, w / 2 + k * f, h1 / 2 + 4, fill='white')
-            c.create_line(h1 / 2 - 4, w / 2 + f * k, h1 / 2 + 4, w / 2 + k * f, fill='white')
+            c.create_text(a*k+w / 2 + f * k-4, b*k+h1 / 2 + 16, text=f, fill='white')
+            c.create_text(a*k+w / 2 - 14, b*k+h1 / 2 - f * k, text=f, fill='white')
+            c.create_line(a*k+w / 2 + f * k, b*k+h1 / 2 - 4, a*k+w / 2 + k * f, b*k+h1 / 2 + 4, fill='white')
+            c.create_line(a*k+h1 / 2 - 4, b*k+w / 2 + f * k, a*k+h1 / 2 + 4, b*k+w / 2 + k * f, fill='white')
     if k<30:
         g = (w // 2) // k
-        for i in range(0, g):
+        for i in range(0, 20):
             if i != 0 and i%5==0:
-                c.create_text(w / 2 + i * k, h1 / 2 + 12, text=i, fill='white')
-                c.create_text(w / 2 - 10, h1 / 2 - i * k, text=i, fill='white')
-                c.create_line(w / 2 + i * k, h1 / 2 - 4, w / 2 + k * i, h1 / 2 + 4, fill='white')
-                c.create_line(h1 / 2 - 4, w / 2 + i * k, h1 / 2 + 4, w / 2 + k * i, fill='white')
-        for i in range(0, g):
+                c.create_text(a*k+w / 2 + i * k, b*k+h1 / 2 + 12, text=i, fill='white')
+                c.create_text(a*k+w / 2 - 10, b*k+h1 / 2 - i * k, text=i, fill='white')
+                c.create_line(a*k+w / 2 + i * k, b*k+h1 / 2 - 4, a*k+w / 2 + k * i, b*k+h1 / 2 + 4, fill='white')
+                c.create_line(a*k+h1 / 2 - 4, b*k+w / 2 + i * k, a*k+h1 / 2 + 4, b*k+w / 2 + k * i, fill='white')
+        for i in range(0, 20):
             f=f-1
             if f%5==0:
-                c.create_text(w / 2 + f * k-4, h1 / 2 + 16, text=f, fill='white')
-                c.create_text(w / 2 - 14, h1 / 2 - f * k, text=f, fill='white')
-                c.create_line(w / 2 + f * k, h1 / 2 - 4, w / 2 + k * f, h1 / 2 + 4, fill='white')
-                c.create_line(h1 / 2 - 4, w / 2 + f * k, h1 / 2 + 4, w / 2 + k * f, fill='white')
+                c.create_text(a*k+w / 2 + f * k-4, b*k+h1 / 2 + 16, text=f, fill='white')
+                c.create_text(a*k+w / 2 - 14, b*k+h1 / 2 - f * k, text=f, fill='white')
+                c.create_line(a*k+w / 2 + f * k, b*k+h1 / 2 - 4, a*k+w / 2 + k * f, b*k+h1 / 2 + 4, fill='white')
+                c.create_line(a*k+h1 / 2 - 4, b*k+w / 2 + f * k, a*k+h1 / 2 + 4, b*k+w / 2 + k * f, fill='white')
     if "sin" in func1:
         func = func1.replace('sin', 'math.sin')
     if "cos" in func1:
@@ -124,7 +152,7 @@ def do_draw(func1,k):     #отрисовка функции
         y = eval('exec("import math") or ' + func, {"x": x})
         y1 = eval('exec("import math") or ' + func, {"x": x + 0.1})
         if (y1 - y) < 40 and (y1 - y) > -40:
-            c.create_line(250 + x * k, 250 - y * k, 250 + (x + 0.1) * k, 250 - y1 * k, fill='white', width="2")
+            c.create_line(a*k+250 + x * k, b*k+250 - y * k, a*k+250 + (x + 0.1) * k, b*k+250 - y1 * k, fill='white', width="2")
         x += 0.1
     c.create_rectangle(0, 0, 500, 20, fill="black")
     c.create_rectangle(0, 0, 20, 500, fill="black")
@@ -135,10 +163,10 @@ def do_draw(func1,k):     #отрисовка функции
 
 
 def submit_callback(input_entry):
-    global func2
+    global func2, a, b
     entry = input_entry.get()
     func2=entry
-    do_draw(entry,k)
+    do_draw(entry,k,a,b)
     return None
 
 root = tk.Tk()
@@ -152,6 +180,6 @@ input_entry = tk.Entry(root)
 input_entry.place(x=80, y=60, width='200')
 submit_button = tk.Button(root, text="Enter", width="20", bg='gray', command=lambda: submit_callback(input_entry))
 submit_button.place(x=80, y=100)
-if keyboard.is_pressed("enter") is True:
-    submit_callback(input_entry)
 root.mainloop()
+
+
